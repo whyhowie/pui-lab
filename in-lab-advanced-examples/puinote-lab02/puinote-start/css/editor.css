@@ -10,13 +10,15 @@
   border-top: 1px solid #939393;
 
   transition-property: bottom;
-  transition-duration: 500ms;    
+  transition-duration: 500ms;
+  display: none;    
 }
 
 
 /* TODO: Add comments */
 #note-editor.edit-mode {
   bottom: 0px;
+  display: block;
 }
 
 

@@ -243,6 +243,15 @@ vertical-align: middle;
 display: none;
 }
 
+.notecard.expanded .icon-collapse {
+display: block;
+}
+
+.notecard.expanded .icon-expand {
+display: none;
+}
+
+
 .btn-expand-collapse {
   width: 30px;
   height: 30px;
