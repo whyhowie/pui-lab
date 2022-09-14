@@ -218,7 +218,15 @@ class Notecard {
     }
 
     updateElement() {
+	const noteImageElement = this.element.querySelector('.notecard-thumbnail');
+	const noteTitleElement = this.element.querySelector('.note-title');
+	const noteBodyElement = this.element.querySelector('.note-body');
+	const noteFooterElement = this.element.querySelector('.notecard-footer');
 
+	noteImageElement.src = this.noteImageURL;
+	noteTitleElement.innerText = this.noteTitle;
+	noteBodyElement.innerText = this.noteBody;
+	noteFooterElement.innerText = this.noteFooter;
     }
 }
 ```
@@ -226,7 +234,9 @@ class Notecard {
 Note that the expand/collapse functionalities only work for the first note now. Why? Because the `querySelector` is selecting the first appearing `.icon-expand` and `.icon-collapse`. These should apply to each notecard item, so let's move these into the class.
 
 Let's move the expand/collapse functionalities into `class Notecard` and modify.
+
 21. Move the `expandNote()` and `collapseNote()` functions into the class.
+```
 class Notecard {
   constructor(imageURL, title, body, footer, elementID) {...}
 
@@ -240,6 +250,7 @@ class Notecard {
     this.element.classList.remove('expanded');
   } 
 }
+```
 
 22. Add the expand/collapse button selectors and onclick event listener registration to construtor. Don't forget to bind `this`.
 ```
@@ -304,7 +315,6 @@ selectedNote.noteBody = editorBodyElement.value;
 ```
 selectedNote.updateElement();
 ```
----
 
 ## Deleting a Note
 29. Add `deleteNote()` function to `Notecard` class.
