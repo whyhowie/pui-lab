@@ -31,7 +31,7 @@ class Notecard extends Component {
             expand_less
           </div>
           <div className="toolbar">
-            <div className="material-symbols-outlined icon icon-edit">
+            <div className="material-symbols-outlined icon icon-edit" onClick={() => this.props.onEdit(this.props.noteIndex)}>
               edit
             </div>
             <div className="material-symbols-outlined icon icon-delete">
