@@ -12,24 +12,29 @@ class App extends Component {
           imageURL: "assets/warhol-frog.png", 
           noteTitle: "This is the First Note", 
           noteBody: "Here is some body text for the first note.", 
+          noteCategory: "Work",
           noteFooter: "Sep 1 2022, 10:25"
         },
         {
           imageURL: "assets/warhol-orangutan.png", 
           noteTitle: "This is the Second Note", 
           noteBody: "And here is some body text for the second note! What could be next?", 
+          noteCategory: "Leisure",
           noteFooter: "Sep 1 2022, 10:25"
         },
         {
           imageURL: "assets/warhol-eagle.png", 
           noteTitle: "This is the Third Note", 
           noteBody: "Yep, you guessed it, here is some body text for the third note.", 
+          noteCategory: "Work",
           noteFooter: "Sep 1 2022, 10:25"
         }
       ],
       editorNoteTitle: "",
       editorNoteBody: "",
       selectedNoteIndex: null,
+      isEditing: false,
+      filterCategory: null,
     }
   }
 
@@ -57,11 +62,36 @@ class App extends Component {
       ...prevState,
       editorNoteTitle: noteTitle,
       editorNoteBody: noteBody,
-      selectedNoteIndex: noteIndex
+      selectedNoteIndex: noteIndex,
+      isEditing: true
     }));
     console.log(this.state.selectedNoteIndex);
   }
 
+  deleteButtonHandler = (noteIndex) => {
+    const newNotecardData = this.state.notecardData
+    newNotecardData.splice(noteIndex, 1)
+    this.setState({notecardData: newNotecardData})
+  }
+
+
+  filterButtonHandler = (category) => {
+    this.setState({filterCategory: category})
+  }
+
+  addNote = () => {
+    let newNotecardItem = {
+      imageURL: "assets/warhol-butterfly.png", 
+      noteTitle: "This is a brand new Note", 
+      noteBody: "Here is some body text for the first note.", 
+      noteCategory: "Leisure",
+      noteFooter: "Sep 1 2022, 10:25"
+    }
+
+    let newNotecardData = this.state.notecardData
+    newNotecardData.push(newNotecardItem)
+    this.setState({notecardData: newNotecardData})
+  }
   // submitNote = () => {
   //   if (this.state.selectedNoteIndex != null) {
   //     console.log(this.state.notecardData);
@@ -89,14 +119,23 @@ class App extends Component {
         notecardData: newNotecardData,
         editorNoteTitle: "",
         editorNoteBody: "",
-        selectedNoteIndex: null
+        selectedNoteIndex: null,
+        isEditing: false
       }))
     }
   };
   
 
   render() {
+    const buttonStyle = {
+      width: "100px",
+      backgroundColor: "white",
+      fontColor: "black"
+    }
+
+
     return (
+
       <div className="App">
         <div id="container">
           <header>
@@ -104,51 +143,57 @@ class App extends Component {
             <h1> PUI-NOTE </h1>
           </header>
           <div id="notecard-list">
-            <Notecard 
-              noteIndex = {0}
-              imageURL= {this.state.notecardData[0].imageURL} 
-              noteTitle= {this.state.notecardData[0].noteTitle} 
-              noteBody= {this.state.notecardData[0].noteBody} 
-              noteFooter= {this.state.notecardData[0].noteFooter}
-              onEdit= {this.editButtonHandler} />
-            <Notecard 
-              noteIndex = {1}
-              imageURL= {this.state.notecardData[1].imageURL} 
-              noteTitle= {this.state.notecardData[1].noteTitle} 
-              noteBody= {this.state.notecardData[1].noteBody} 
-              noteFooter= {this.state.notecardData[1].noteFooter}
-              onEdit= {this.editButtonHandler}  />
-            <Notecard 
-              noteIndex = {2}
-              imageURL= {this.state.notecardData[2].imageURL} 
-              noteTitle= {this.state.notecardData[2].noteTitle} 
-              noteBody= {this.state.notecardData[2].noteBody} 
-              noteFooter= {this.state.notecardData[2].noteFooter}
-              onEdit= {this.editButtonHandler} />
+            {this.state.notecardData.map (
+              (notecard, idx) => {
+                return <Notecard 
+                key = {idx}
+                noteIndex = {idx}
+                imageURL= {this.state.notecardData[idx].imageURL} 
+                noteTitle= {this.state.notecardData[idx].noteTitle} 
+                noteBody= {this.state.notecardData[idx].noteBody} 
+                noteCategory= {this.state.notecardData[idx].noteCategory}
+                noteFooter= {this.state.notecardData[idx].noteFooter}
+                onEdit= {this.editButtonHandler}
+                onDelete= {this.deleteButtonHandler} />
+              }
+            )}
           </div>
+          
+          <button style={buttonStyle} onClick={() => this.filterButtonHandler("Work")}>Work</button>
+          <button style={buttonStyle} onClick={() => this.filterButtonHandler("Leisure")}>Leisure</button>
+          <button style={buttonStyle} onClick={() => this.filterButtonHandler(null)}>All</button>
+          <br/>
+          <button style={buttonStyle} onClick={this.addNote}>Add a new note</button>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
 
-          <div id="note-editor" className="edit-mode">
-            <div id="btn-new-note">
-              EDIT NOTE
-            </div>
-            <div className="note-editor-contents">
-              <div className="note-editor-left">
-                <form>
-                  <input id="note-editor-title" placeholder="Title of Your Note..."
-                    name="dummy" maxLength="50" onChange={this.handleTitleChange} value={this.state.editorNoteTitle}>
-                  </input>
-                  <textarea id="note-editor-body" placeholder="Body of Your Note..."
-                    rows="15" maxLength="1000" onChange={this.handleBodyChange} value={this.state.editorNoteBody}>
-                  </textarea>
-                </form>
+          
+          { this.state.isEditing &&
+            <div id="note-editor" className="edit-mode">
+              <div id="btn-new-note">
+                EDIT NOTE
               </div>
-              <div className="note-editor-right">
-                <div className="material-symbols-outlined icon icon-done" onClick={this.submitNote}>
-                  done
+              <div className="note-editor-contents">
+                <div className="note-editor-left">
+                  <form>
+                    <input id="note-editor-title" placeholder="Title of Your Note..."
+                      name="dummy" maxLength="50" onChange={this.handleTitleChange} value={this.state.editorNoteTitle}>
+                    </input>
+                    <textarea id="note-editor-body" placeholder="Body of Your Note..."
+                      rows="15" maxLength="1000" onChange={this.handleBodyChange} value={this.state.editorNoteBody}>
+                    </textarea>
+                  </form>
+                </div>
+                <div className="note-editor-right">
+                  <div className="material-symbols-outlined icon icon-done" onClick={this.submitNote}>
+                    done
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
     );

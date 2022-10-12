@@ -3,55 +3,13 @@ import logo from './logo.svg';
 import './App.css';
 import Notecard from './Notecard';
 import HookExample from './HookExample';
+import CategoryList from '../../puinote-start/src/CategoryList';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      notecardData: [
-        {
-          imageURL: "assets/warhol-frog.png",
-          noteTitle: "This is the First Note",
-          noteBody: "Here is some body text for the first note.",
-          noteCategory: "Work",
-          noteFooter: "Sep 1 2022, 10:25"
-        },
-        {
-          imageURL: "assets/warhol-orangutan.png" ,
-          noteTitle: "This is the Second Note" ,
-          noteBody: "And here is some body text for the second note! What could be next?",
-          noteCategory: "Leisure",
-          noteFooter: "Sep 1 2022, 10:25"
-        },
-        {
-          imageURL: "assets/warhol-eagle.png" ,
-          noteTitle: "This is the Third Note" ,
-          noteBody: "Yep, you guessed it, here is some body text for the third note." ,
-          noteCategory: "Work",
-          noteFooter: "Sep 1 2022, 10:25"
-        },
-        {
-          imageURL: "assets/warhol-frog.png",
-          noteTitle: "This is the First Note",
-          noteBody: "Here is some body text for the first note.",
-          noteCategory: "Work",
-          noteFooter: "Sep 1 2022, 10:25"
-        },
-        {
-          imageURL: "assets/warhol-orangutan.png" ,
-          noteTitle: "This is the Second Note" ,
-          noteBody: "And here is some body text for the second note! What could be next?",
-          noteCategory: "Leisure",
-          noteFooter: "Sep 1 2022, 10:25"
-        },
-        {
-          imageURL: "assets/warhol-eagle.png" ,
-          noteTitle: "This is the Third Note" ,
-          noteBody: "Yep, you guessed it, here is some body text for the third note." ,
-          noteCategory: "Work",
-          noteFooter: "Sep 1 2022, 10:25"
-        },        
-      ],
+      notecardData: JSON.parse(localStorage.getItem("notecardData")) || [],
       
       selectedNoteIndex: null,
       editorNoteTitle: "",
@@ -226,10 +184,8 @@ class App extends Component {
           }
           
           {/* Extra examples for filtering and adding a new note */}
-          <p>Show Category:</p>
-          <button style={buttonStyle} onClick={() => {this.filterButtonHandler("Work")}}>Work</button>
-          <button style={buttonStyle} onClick={() => {this.filterButtonHandler("Leisure")}}>Leisure</button>
-          <button style={buttonStyle} onClick={() => {this.filterButtonHandler(null)}}>All</button>
+          {/* Extra examples for filtering and adding a new note */}
+          <CategoryList filterButtonHandler={this.filterButtonHandler}/>
           <p>Add a New Note</p>
           <button style={buttonStyle} onClick={() => {this.addNote()}}>New</button>
         </div>
